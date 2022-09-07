@@ -7,6 +7,7 @@ const nextConfig = {
       'leetcode.com',
       'assets.leetcode.com',
       's3-us-west-1.amazonaws.com',
+      'aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com',
     ],
   },
   env: {

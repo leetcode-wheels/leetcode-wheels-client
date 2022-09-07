@@ -1,6 +1,30 @@
 import z from 'zod'
 
-const userProfileResponseValidator = z.object({
+export const userProfileObjectValidator = z.object({
+  realName: z.string(),
+  aboutMe: z.string(),
+  company: z.string(),
+  countryName: z.string(),
+  ranking: z.number(),
+  reputation: z.number(),
+  school: z.string(),
+  skillTags: z.array(z.string()),
+  userAvatar: z.string().url(),
+})
+
+export const rankingNodeValidator = z.object({
+  ranking: z.string(),
+  currentRating: z.string(),
+  currentGlobalRanking: z.number(),
+  dataRegion: z.string(),
+  user: z.object({
+    username: z.string(),
+    nameColor: z.string(),
+    profile: userProfileObjectValidator,
+  }),
+})
+
+export const userProfileResponseValidator = z.object({
   username: z.string(),
   submitStats: z.object({
     acSubmissionNum: z.array(
@@ -11,17 +35,12 @@ const userProfileResponseValidator = z.object({
       })
     ),
   }),
-  profile: z.object({
-    realName: z.string(),
-    aboutMe: z.string(),
-    company: z.string(),
-    countryName: z.string(),
-    ranking: z.number(),
-    reputation: z.number(),
-    school: z.string(),
-    skillTags: z.array(z.string()),
-    userAvatar: z.string().url(),
-  }),
+  profile: userProfileObjectValidator,
 })
 
-export { userProfileResponseValidator }
+export const globalRankingResponseValidator = z.object({
+  totalUsers: z.number(),
+  userPerPage: z.number(),
+  myRank: z.number().nullable(),
+  rankingNodes: z.array(rankingNodeValidator),
+})

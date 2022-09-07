@@ -49,8 +49,6 @@ const Navbar: React.FC<NavbarProps> = () => {
     [router.pathname]
   )
 
-  console.log(router.pathname)
-
   const navigation = [
     {
       name: 'Problems',
