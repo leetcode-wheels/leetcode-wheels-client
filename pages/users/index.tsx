@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Image from 'next/image'
 import clsx from 'classnames'
 
@@ -96,12 +96,23 @@ const UsersList: React.FC<UsersListProps> = ({
   )
 }
 
-const UsersPage: NextPage = () => {
-  const { data: globalRanking, isRefetching, refetch } = useGetGlobalRanking()
+type UsersPageProps = {
+  page: number
+}
+
+const UsersPage: NextPage<UsersPageProps> = ({ page }) => {
+  const { data: globalRanking, isRefetching } = useGetGlobalRanking(page)
 
   return (
     <HomeLayout title="Global Ranking">
-      <button onClick={() => refetch()}>Refetch</button>
+      <Link
+        href={{
+          pathname: '/users',
+          query: { page: page + 1 },
+        }}
+      >
+        <a>Next</a>
+      </Link>
       {globalRanking && (
         <UsersList
           rankingNodes={globalRanking?.rankingNodes}
@@ -111,4 +122,13 @@ const UsersPage: NextPage = () => {
     </HomeLayout>
   )
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      page: Number(ctx.query.page) || 1,
+    },
+  }
+}
+
 export default UsersPage

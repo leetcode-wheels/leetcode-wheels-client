@@ -9,7 +9,7 @@ export const getUserProfile = (username: string) =>
 export const getQuestionOfTheDay = () =>
   httpService.get('/question/today').then((e) => e.data)
 
-export const getGlobalRanking = () =>
+export const getGlobalRanking = (page = 1) =>
   httpService
-    .get('/user/global-ranking')
+    .get(`/user/global-ranking?page=${page}`)
     .then((e) => e.data as GlobalRankingResponse)
