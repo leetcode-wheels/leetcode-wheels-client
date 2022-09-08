@@ -15,11 +15,11 @@ const classes = clsx.bind({
   '2xl': 'w-20 h-20',
 })
 
-const Spinner: React.FC<SpinnerProps> = ({ size = 'lg' }) => {
+const Spinner: React.FC<SpinnerProps> = ({ className, size = 'lg' }) => {
   return (
     <svg
       aria-hidden="true"
-      className={classes('root', size)}
+      className={classes('root', size, className)}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
