@@ -2,14 +2,17 @@ import { useMemo } from 'react'
 import { GetServerSideProps, NextPage } from 'next'
 import Image from 'next/image'
 import clsx from 'classnames'
+import { trpc } from '@/config/trpc'
 
 import Link from '../../components/link/link'
 import Pagination from '../../components/pagination/pagination'
 import Spinner from '../../components/spinner'
 import HomeLayout from '../../layouts/home'
-import { RankingNode, UserProfile } from '../../services/leetcode/methods/types'
-import useGetGlobalRanking from '../../hooks/useGetGlobalRanking'
 import defaultAvatarUrl from '../../assets/default_avatar.webp'
+import {
+  RankingNode,
+  UserProfile,
+} from '@/server/services/leetcode/methods/types'
 
 type UserElementProps = {
   user: {
@@ -125,9 +128,9 @@ type UsersPageProps = {
 const UsersPage: NextPage<UsersPageProps> = ({ page }) => {
   const {
     data: globalRanking,
-    isFetching,
+    isLoading,
     isRefetching,
-  } = useGetGlobalRanking(page, {
+  } = trpc.useQuery(['user.global-ranking', { page: page ?? 1 }], {
     keepPreviousData: true,
   })
 
@@ -142,7 +145,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ page }) => {
         )}
         <UsersList
           rankingNodes={globalRanking?.rankingNodes}
-          isLoading={isFetching || isRefetching}
+          isLoading={isLoading || isRefetching}
         />
       </div>
       {globalRanking && (
