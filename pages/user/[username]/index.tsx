@@ -1,8 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next'
 import Image from 'next/image'
-import useGetUserProfile from '../../../hooks/useGetUserProfile'
 import HomeLayout from '../../../layouts/home'
-import { UserProfileResponse } from '../../../services/leetcode/methods/types'
 
 import {
   Chart as ChartJS,
@@ -16,6 +14,8 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import Spinner from '../../../components/spinner'
+import { trpc } from '@/config/trpc'
+import { UserProfileResponse } from '@/server/services/leetcode/methods/types'
 
 ChartJS.register(
   CategoryScale,
@@ -139,9 +139,12 @@ const MainContent = () => {
 }
 
 const UserDetailsPage: NextPage<UserDetailsPageProps> = ({ username }) => {
-  const { data: user, isLoading } = useGetUserProfile(username, {
-    enabled: !!username.length,
-  })
+  const { data: user, isLoading } = trpc.useQuery(
+    ['user.profile', { username }],
+    {
+      enabled: !!username.length,
+    }
+  )
 
   if (isLoading) {
     return null

@@ -20,8 +20,7 @@ const Pagination: React.FC<PaginationProps> = ({
   basePath,
   ...props
 }) => {
-  const { totalPages, isLastPage } = usePagination({ page, pageSize, count })
-  console.log({ totalPages, isLastPage })
+  const { totalPages } = usePagination({ page, pageSize, count })
 
   const pagesToRender = useMemo(() => {
     const ret = []
