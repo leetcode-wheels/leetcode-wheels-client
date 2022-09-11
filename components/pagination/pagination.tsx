@@ -39,7 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({
       className={clsx('flex items-center gap-2 md:gap-4', className)}
       {...props}
     >
-      {page > 2 && (
+      {page > 3 && (
         <>
           <Link href={{ pathname: basePath, query: { page: 1 } }} passHref>
             <PaginationItem>1</PaginationItem>

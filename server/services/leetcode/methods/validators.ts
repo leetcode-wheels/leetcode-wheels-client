@@ -44,3 +44,21 @@ export const globalRankingResponseValidator = z.object({
   myRank: z.number().nullable(),
   rankingNodes: z.array(rankingNodeValidator),
 })
+
+export const contestRankingDataResponseValidator = z.object({
+  userContestRanking: z.object({
+    attendedContestsCount: z.number(),
+    rating: z.number(),
+    globalRanking: z.number(),
+  }),
+  userContestRankingHistory: z.array(
+    z.object({
+      contest: z.object({
+        title: z.string(),
+        startTime: z.number(),
+      }),
+      rating: z.number(),
+      ranking: z.number(),
+    })
+  ),
+})

@@ -6,8 +6,8 @@ import { useCallback } from 'react'
 import clsx from 'classnames'
 import { useRouter } from 'next/router'
 
-export type NavbarProps = {
-  example?: boolean
+export type NavbarProps = JSX.IntrinsicElements['nav'] & {
+  variant?: 'hero' | 'primary'
 }
 
 type NavbarItem = {
@@ -22,26 +22,25 @@ const DisclosurePanel: React.FC<{ navigation: NavbarItem[] }> = ({
   <Disclosure.Panel className="sm:hidden">
     <div className="space-y-1 px-2 pt-2 pb-3">
       {navigation.map((item) => (
-        <Disclosure.Button
-          key={item.name}
-          as="a"
-          href={item.href}
-          className={clsx(
-            item.current
-              ? 'bg-gray-900 text-white'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-            'block px-3 py-2 rounded-md text-base font-medium'
-          )}
-          aria-current={item.current ? 'page' : undefined}
-        >
-          {item.name}
-        </Disclosure.Button>
+        <Link href={item.href} key={item.name}>
+          <Disclosure.Button
+            className={clsx(
+              item.current
+                ? 'bg-zinc-900 text-white'
+                : 'text-zinc-300 hover:bg-gray-700 hover:text-white font-semibold',
+              'block px-3 py-2 rounded-md text-base font-medium'
+            )}
+            aria-current={item.current ? 'page' : undefined}
+          >
+            {item.name}
+          </Disclosure.Button>
+        </Link>
       ))}
     </div>
   </Disclosure.Panel>
 )
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
   const router = useRouter()
 
   const isCurrentPath = useCallback(
@@ -64,7 +63,14 @@ const Navbar: React.FC<NavbarProps> = () => {
   ] as NavbarItem[]
 
   return (
-    <Disclosure as="nav" className="bg-slate-700">
+    <Disclosure
+      as="nav"
+      className={clsx(
+        'relative z-50',
+        variant === 'primary' ? 'bg-zinc-800' : 'bg-transparent',
+        className
+      )}
+    >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -91,9 +97,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                       width={22}
                       height={24}
                     />
-                    <span className="text-gray-300 font-semibold">
-                      leetCode.w
-                    </span>
+                    <span className="text-white font-semibold">leetCode.w</span>
                   </a>
                 </Link>
                 <div className="hidden sm:ml-6 sm:block">
@@ -104,8 +108,8 @@ const Navbar: React.FC<NavbarProps> = () => {
                           className={clsx(
                             'transition-colors duration-200',
                             item.current
-                              ? 'bg-gray-900 text-white'
-                              : 'text-gray-300 hover:text-white hover:shadow-lg',
+                              ? 'bg-zinc-900 text-white'
+                              : 'text-zinc-300 hover:text-white hover:shadow-lg font-semibold',
                             'px-3 py-2 rounded-md text-sm font-medium'
                           )}
                           aria-current={item.current ? 'page' : undefined}

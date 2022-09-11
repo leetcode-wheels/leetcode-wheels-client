@@ -1,12 +1,7 @@
-import {
-  QueryFunction,
-  QueryKey,
-  useQuery as useQueryBase,
-  UseQueryOptions,
-  UseQueryResult,
-} from 'react-query'
 import { AxiosError } from 'axios'
 import toast from 'react-hot-toast'
+import { trpc } from '@/config/trpc'
+import { UseQueryResult } from 'react-query'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isAxiosError = (e: AxiosError<Error> | any): e is AxiosError<Error> =>
@@ -24,23 +19,17 @@ const parseError = (e: any) =>
     : e.response.data?.message?.join(', ') ??
       'Oops! There was an unexpected error'
 
-const useQuery = <
-  TQueryFnData = unknown,
-  TError = unknown,
-  TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
->(
-  queryKey: TQueryKey,
-  queryFn: QueryFunction<TQueryFnData, TQueryKey>,
-  options?: UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
-): UseQueryResult<TData, TError> =>
-  useQueryBase(queryKey, queryFn, {
+export const useTrpcQuery = (
+  pathAndInputs: Parameters<typeof trpc.useQuery>[0],
+  options?: Parameters<typeof trpc.useQuery>[1]
+): UseQueryResult =>
+  trpc.useQuery(pathAndInputs, {
     retry: retryPolicy,
-    ...options,
-    refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
     onError: (e) =>
       isAxiosError(e) ? toast.error(parseError(e)) : options?.onError?.(e),
+    ...options,
   })
 
-export default useQuery
+export default useTrpcQuery

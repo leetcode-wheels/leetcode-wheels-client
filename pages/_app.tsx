@@ -1,16 +1,14 @@
 import type { AppProps } from 'next/app'
-import { QueryClientProvider } from 'react-query'
 import { Toaster } from 'react-hot-toast'
 import { withTRPC } from '@trpc/next'
 import Head from 'next/head'
 
-import queryClient from '@/config/react-query.config'
 import { AppRouter } from '@/server/router'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <Head>
         <title>Leetcode Wheels</title>
       </Head>
@@ -29,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <Component {...pageProps} />
-    </QueryClientProvider>
+    </>
   )
 }
 

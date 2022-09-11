@@ -17,6 +17,7 @@
     "@trpc/next": "^9.27.2",
     "@trpc/react": "^9.27.2",
     "@trpc/server": "^9.27.2",
+    "@uiball/loaders": "^1.2.6",
     "add": "^2.0.6",
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
@@ -32,6 +33,7 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.2",
     "@types/node": "18.7.14",
     "@types/react": "18.0.18",
     "@types/react-dom": "18.0.6",

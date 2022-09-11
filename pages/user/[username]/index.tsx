@@ -2,53 +2,9 @@ import { GetServerSideProps, NextPage } from 'next'
 import Image from 'next/image'
 import HomeLayout from '../../../layouts/home'
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js'
-import { Line } from 'react-chartjs-2'
 import Spinner from '../../../components/spinner'
 import { trpc } from '@/config/trpc'
 import { UserProfileResponse } from '@/server/services/leetcode/methods/types'
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-)
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-  maintainAspectRatio: false,
-}
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      data: [1500, 1767, 1630, 1580, 1500, 1610, 1690, 1723, 1815],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-}
 
 export type UserCardProps = JSX.IntrinsicElements['div'] & {
   user?: UserProfileResponse
@@ -68,7 +24,7 @@ export type SideBarProps = {
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => {
   const userData = user && (
-    <>
+    <div className="text-zinc-800 divide-y divide-gray-500">
       <div className="flex gap-4 px-4 py-2">
         <Image
           className="rounded-xl shrink-0"
@@ -98,10 +54,11 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
         <span>Education</span>
         <span>{user.profile.school}</span>
       </div>
-    </>
+    </div>
   )
+
   return (
-    <div className="container bg-white rounded-lg shadow-xl min-w-max max-w-sm md:max-w-md divide-y divide-gray-300">
+    <div className="container bg-zinc-400 rounded-lg shadow-xl min-w-max max-w-sm md:max-w-md">
       {user ? (
         userData
       ) : (
@@ -109,15 +66,6 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
           <Spinner size="sm" />
         </div>
       )}
-    </div>
-  )
-}
-
-const RatingCard: React.FC<RatingCardProps> = ({}) => {
-  return (
-    <div className="container h-40 bg-white rounded-lg shadow-xl max-w-lg px-4 py-8">
-      <h4>Contest Rating: 1687pt</h4>
-      <Line options={options} data={data} height="200px" width="200px" />
     </div>
   )
 }
@@ -130,31 +78,20 @@ const SideBar: React.FC<SideBarProps> = ({ user }) => {
   )
 }
 
-const MainContent = () => {
-  return (
-    <div className="w-2/3">
-      <RatingCard />
-    </div>
-  )
-}
-
 const UserDetailsPage: NextPage<UserDetailsPageProps> = ({ username }) => {
-  const { data: user, isLoading } = trpc.useQuery(
+  const { data: user, isLoading: loadingUser } = trpc.useQuery(
     ['user.profile', { username }],
     {
       enabled: !!username.length,
     }
   )
 
-  if (isLoading) {
-    return null
-  }
+  const isLoading = loadingUser
 
   return (
-    <HomeLayout>
+    <HomeLayout isLoading={isLoading} loadingBlocksContent>
       <div className="flex flex-col md:flex-row w-full gap-6">
         {user && <SideBar user={user} />}
-        <MainContent />
       </div>
     </HomeLayout>
   )
