@@ -6,6 +6,7 @@ import {
   userProfileObjectValidator,
   userProfileResponseValidator,
   contestRankingDataResponseValidator,
+  contestDataValidator,
 } from './validators'
 
 export type UserProfile = z.infer<typeof userProfileObjectValidator>
@@ -21,3 +22,5 @@ export type RankingNode = z.infer<typeof rankingNodeValidator>
 export type ContestRankingDataResponse = z.infer<
   typeof contestRankingDataResponseValidator
 >
+
+export type ContestData = z.infer<typeof contestDataValidator>

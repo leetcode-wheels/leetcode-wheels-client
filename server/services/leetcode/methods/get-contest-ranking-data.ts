@@ -8,6 +8,6 @@ const getContestRankingData = (username: string) =>
       query: GET_CONTEST_RANKING_DATA,
       variables: { username },
     })
-    .then((e) => e.data as ContestRankingDataResponse)
+    .then((e) => e.data.data as ContestRankingDataResponse)
 
 export default getContestRankingData

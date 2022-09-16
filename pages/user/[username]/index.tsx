@@ -5,6 +5,7 @@ import HomeLayout from '../../../layouts/home'
 import Spinner from '../../../components/spinner'
 import { trpc } from '@/config/trpc'
 import { UserProfileResponse } from '@/server/services/leetcode/methods/types'
+import ContestHistory from '@/components/contest-history'
 
 export type UserCardProps = JSX.IntrinsicElements['div'] & {
   user?: UserProfileResponse
@@ -72,7 +73,7 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
 const SideBar: React.FC<SideBarProps> = ({ user }) => {
   return (
-    <div className="w-1/3">
+    <div>
       <UserCard user={user} />
     </div>
   )
@@ -83,15 +84,32 @@ const UserDetailsPage: NextPage<UserDetailsPageProps> = ({ username }) => {
     ['user.profile', { username }],
     {
       enabled: !!username.length,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   )
+  const { data: contestRankingData, isLoading: loadingContestRankingData } =
+    trpc.useQuery(['user.contest-ranking-data', { username }], {
+      enabled: !!username.length,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    })
 
-  const isLoading = loadingUser
+  const isLoading = loadingUser || loadingContestRankingData
+
+  console.log(contestRankingData)
 
   return (
     <HomeLayout isLoading={isLoading} loadingBlocksContent>
       <div className="flex flex-col md:flex-row w-full gap-6">
         {user && <SideBar user={user} />}
+        {contestRankingData && (
+          <div className="container min-w-max max-w-sm md:max-w-md">
+            <ContestHistory
+              data={contestRankingData.userContestRankingHistory}
+            />
+          </div>
+        )}
       </div>
     </HomeLayout>
   )
