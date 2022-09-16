@@ -12,6 +12,7 @@ const nextConfig = {
   },
   env: {
     NEXT_LEETCODE_BASE_URL: process.env.NEXT_LEETCODE_BASE_URL,
+    NEXT_VERCEL_URL: process.env.NEXT_VERCEL_URL,
   },
 }
 
