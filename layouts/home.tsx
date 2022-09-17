@@ -17,7 +17,7 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({
       <Navbar />
       {(!loadingBlocksContent || !isLoading) && (
         <main className="py-8 max-w-7xl mx-auto">
-          <div className="px-4 sm:px-16">
+          <div className="px-4 lg:px-16">
             <h1 className="font-semibold text-4xl text-white">{title}</h1>
             {children}
           </div>

@@ -1,12 +1,13 @@
 import { ContestData } from '@/server/services/leetcode/methods/types'
 import { format } from 'date-fns'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   LineChart,
   Line,
   ResponsiveContainer,
   Tooltip,
   TooltipProps,
+  YAxis,
 } from 'recharts'
 import {
   NameType,
@@ -42,11 +43,29 @@ const CustomTooltip: React.FC<TooltipProps<ValueType, NameType>> = ({
 
 const ContestHistory: React.FC<ContestHistoryProps> = ({ data, ...props }) => {
   const filteredData = useMemo(() => {
-    const lowIndex = data?.findIndex((e) => e.ranking > 0)
-    if (!lowIndex) return []
-    const indexToStart = Math.max(0, lowIndex - 5)
-    return data?.filter((_, i) => i >= indexToStart)
+    return data?.filter((e) => e.ranking > 0)
   }, [data])
+
+  const { maxRating, minRating } = useMemo(() => {
+    let minRating = Infinity,
+      maxRating = -Infinity
+
+    filteredData?.forEach((el) => {
+      maxRating = Math.max(maxRating, el.rating)
+      minRating = Math.min(minRating, el.rating)
+    })
+
+    return {
+      maxRating: Math.ceil(maxRating / 500) * 500,
+      minRating: Math.floor(minRating / 500) * 500,
+    }
+  }, [filteredData])
+
+  const contestNametoContestLink = useCallback((contestName: string) => {
+    const contestUri = contestName.replaceAll(' ', '-').toLowerCase()
+    return `${process.env.NEXT_LEETCODE_BASE_URL}/contest/${contestUri}`
+  }, [])
+
   return (
     <ResponsiveContainer
       className="border border-gray-300 rounded-lg bg-zinc-800"
@@ -58,10 +77,25 @@ const ContestHistory: React.FC<ContestHistoryProps> = ({ data, ...props }) => {
         margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
       >
         <Line
+          activeDot={{
+            onClick: (_, e: unknown) => {
+              const contestData = (e as { payload: ContestData }).payload
+              const contestLink = contestNametoContestLink(
+                contestData.contest.title
+              )
+              window.open(contestLink, '_blank')
+            },
+          }}
+          dot={false}
           dataKey="rating"
           stroke="#8884d8"
           animationDuration={250}
-          dot={false}
+        />
+        <YAxis
+          type="number"
+          domain={[minRating, maxRating]}
+          tickMargin={2}
+          tick={{ fontSize: 10 }}
         />
         <Tooltip content={<CustomTooltip />} />
       </LineChart>
