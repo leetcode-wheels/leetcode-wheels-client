@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      width: {
+        'main-content': 'calc(100% - 24rem)',
+      },
       minWidth: {
         10: '2.5rem',
       },
