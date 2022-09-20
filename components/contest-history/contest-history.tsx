@@ -1,6 +1,6 @@
 import { ContestData } from '@/server/services/leetcode/methods/types'
 import { format } from 'date-fns'
-import { useCallback, useMemo } from 'react'
+import { memo, useMemo, useCallback } from 'react'
 import {
   LineChart,
   Line,
@@ -103,4 +103,4 @@ const ContestHistory: React.FC<ContestHistoryProps> = ({ data, ...props }) => {
   )
 }
 
-export default ContestHistory
+export default memo(ContestHistory)
