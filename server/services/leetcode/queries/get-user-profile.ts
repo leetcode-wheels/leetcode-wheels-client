@@ -11,6 +11,7 @@ query getUserProfile($username: String!) {
     }
     profile {
       realName
+      countryName
       aboutMe
       company
       ranking
