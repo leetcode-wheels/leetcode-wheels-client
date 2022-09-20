@@ -4,14 +4,12 @@ import HomeLayout from '../../../layouts/home'
 
 import Spinner from '../../../components/spinner'
 import { trpc } from '@/config/trpc'
-import {
-  ContestRankingDataResponse,
-  UserProfileResponse,
-} from '@/server/services/leetcode/methods/types'
+import { UserProfileResponse } from '@/server/services/leetcode/methods/types'
 import ContestHistory from '@/components/contest-history'
 
 export type UserCardProps = JSX.IntrinsicElements['div'] & {
   user?: UserProfileResponse
+  ranking?: number
 }
 
 export type RatingCardProps = JSX.IntrinsicElements['div'] & {
@@ -24,13 +22,10 @@ export type UserDetailsPageProps = {
 
 export type SideBarProps = {
   user: UserProfileResponse
+  ranking: number
 }
 
-export type MainContentProps = {
-  contestRankingData: ContestRankingDataResponse
-}
-
-const UserCard: React.FC<UserCardProps> = ({ user }) => {
+const UserCard: React.FC<UserCardProps> = ({ user, ranking }) => {
   const userData = user && (
     <div className="text-zinc-800 divide-y divide-gray-500">
       <div className="flex gap-4 px-4 py-2">
@@ -46,8 +41,8 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
             {user.profile?.realName}
           </h4>
           <h5 className="">{user.username}</h5>
-          <h5 className="mt-4 line-clamp-1">
-            Ranking: {user.profile.ranking}{' '}
+          <h5 className="mt-4">
+            Ranking: {ranking ?? '--'}{' '}
             <span className="font-semibold">(worlwide)</span>
           </h5>
         </div>
@@ -80,20 +75,10 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
   )
 }
 
-const SideBar: React.FC<SideBarProps> = ({ user }) => {
+const SideBar: React.FC<SideBarProps> = ({ user, ranking }) => {
   return (
-    <aside className="w-full flex flex-col">
-      <UserCard user={user} />
-    </aside>
-  )
-}
-
-const MainContent: React.FC<MainContentProps> = ({ contestRankingData }) => {
-  return (
-    <div className="w-full">
-      {contestRankingData && (
-        <ContestHistory data={contestRankingData.userContestRankingHistory} />
-      )}
+    <div>
+      <UserCard user={user} ranking={ranking} />
     </div>
   )
 }
@@ -118,13 +103,20 @@ const UserDetailsPage: NextPage<UserDetailsPageProps> = ({ username }) => {
 
   return (
     <HomeLayout isLoading={isLoading} loadingBlocksContent>
-      <div className="flex flex-col md:flex-row gap-5">
-        <div className="w-full md:w-96">{user && <SideBar user={user} />}</div>
-        <div className="w-full md:w-main-content">
-          {contestRankingData && (
-            <MainContent contestRankingData={contestRankingData} />
-          )}
-        </div>
+      <div className="flex flex-col md:flex-row w-full gap-6">
+        {user && contestRankingData && (
+          <SideBar
+            user={user}
+            ranking={contestRankingData?.userContestRanking.globalRanking}
+          />
+        )}
+        {contestRankingData && (
+          <div className="container min-w-max max-w-sm md:max-w-md">
+            <ContestHistory
+              data={contestRankingData.userContestRankingHistory}
+            />
+          </div>
+        )}
       </div>
     </HomeLayout>
   )
