@@ -97,7 +97,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
                       width={22}
                       height={24}
                     />
-                    <span className="text-white font-semibold">leetCode.w</span>
+                    <span className="text-white font-semibold">LeetCode.w</span>
                   </a>
                 </Link>
                 <div className="hidden sm:ml-6 sm:block">
