@@ -44,8 +44,8 @@ const UserElement: React.FC<UserElementProps> = ({
   }, [rankingInfo?.currentRating])
 
   return (
-    <li className="transition-colors duration-200 hover:bg-zinc-900 hover:bg-opacity-25">
-      <div className="w-full py-2 px-4 inline-flex items-center gap-8 min-w-fit my-2">
+    <li className="transition-colors duration-200 hover:bg-zinc-900 hover:bg-opacity-25 min-w-full overflow-x-auto">
+      <div className="w-full py-2 px-2 inline-flex items-center gap-4 min-w-fit my-2">
         <div className="w-12 text-sm font-semibold text-right">
           {rankingInfo.currentGlobalRanking}
         </div>
@@ -65,7 +65,7 @@ const UserElement: React.FC<UserElementProps> = ({
             </a>
           </Link>
         )}{' '}
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center gap-10">
           <div className="flex flex-col gap-1 font-semibold text-slate-800">
             <Link href={`/user/${user.username}`} disabled={disabled}>
               <a className="inline-flex items-center text-white">
@@ -77,7 +77,7 @@ const UserElement: React.FC<UserElementProps> = ({
               {rankingInfo.contestsAttended} contests attended
             </span>
           </div>
-          <span className="text-sm">{user.profile.countryName}</span>
+          <span className="text-xs">{user.profile.countryName}</span>
         </div>
       </div>
     </li>
