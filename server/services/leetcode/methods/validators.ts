@@ -62,3 +62,46 @@ export const contestRankingDataResponseValidator = z.object({
   }),
   userContestRankingHistory: z.array(contestDataValidator),
 })
+
+export const topicTagValidator = z.object({
+  name: z.string(),
+  slug: z.string(),
+})
+
+export const questionDifficultyValidator = z.enum(['Easy', 'Medium', 'Hard'])
+
+export const questionValidator = z.object({
+  questionId: z.string(),
+  questionTitle: z.string(),
+  content: z.string(),
+  difficulty: questionDifficultyValidator,
+  submitUrl: z.string(),
+  topicTags: z.array(topicTagValidator),
+  stats: z.string(),
+})
+
+export const questionDetailsValidator = z.object({
+  isCurrentUserAuthenticated: z.boolean(),
+  question: questionValidator,
+  isPremium: z.boolean(),
+})
+
+export const problemseteQuestionValidator = z.object({
+  frontendQuestionId: z.string(),
+  acRate: z.number(),
+  difficulty: questionDifficultyValidator,
+  title: z.string(),
+  titleSlug: z.string(),
+  topicTags: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      slug: z.string(),
+    })
+  ),
+})
+
+export const problemsetQuestionListValidator = z.object({
+  total: z.number(),
+  questions: z.array(problemseteQuestionValidator),
+})
