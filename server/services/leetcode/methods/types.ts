@@ -7,6 +7,12 @@ import {
   userProfileResponseValidator,
   contestRankingDataResponseValidator,
   contestDataValidator,
+  topicTagValidator,
+  questionValidator,
+  questionDetailsValidator,
+  questionDifficultyValidator,
+  problemsetQuestionListValidator,
+  problemseteQuestionValidator,
 } from './validators'
 
 export type UserProfile = z.infer<typeof userProfileObjectValidator>
@@ -24,3 +30,17 @@ export type ContestRankingDataResponse = z.infer<
 >
 
 export type ContestData = z.infer<typeof contestDataValidator>
+
+export type TopicTag = z.infer<typeof topicTagValidator>
+
+export type Question = z.infer<typeof questionValidator>
+
+export type QuestionDifficulty = z.infer<typeof questionDifficultyValidator>
+
+export type QuestionDetails = z.infer<typeof questionDetailsValidator>
+
+export type ProblemsetQuestion = z.infer<typeof problemseteQuestionValidator>
+
+export type ProblemsetQuestionList = z.infer<
+  typeof problemsetQuestionListValidator
+>
