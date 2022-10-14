@@ -60,6 +60,11 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
       href: '/contests',
       current: isCurrentPath('/contests'),
     },
+    {
+      name: 'Support',
+      href: '/support',
+      current: isCurrentPath('/support'),
+    },
   ] as NavbarItem[]
 
   return (
