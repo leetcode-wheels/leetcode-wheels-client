@@ -3,12 +3,14 @@ import { Toaster } from 'react-hot-toast'
 import { withTRPC } from '@trpc/next'
 import Head from 'next/head'
 
+import GlobalSearchProvider from '@/contexts/global-search'
+
 import { AppRouter } from '@/server/router'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <GlobalSearchProvider>
       <Head>
         <title>Leetcode Wheels</title>
       </Head>
@@ -27,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <Component {...pageProps} />
-    </>
+    </GlobalSearchProvider>
   )
 }
 

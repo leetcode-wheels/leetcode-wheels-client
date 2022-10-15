@@ -2,9 +2,10 @@ import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback } from 'react'
+import { useCallback, useContext } from 'react'
 import clsx from 'classnames'
 import { useRouter } from 'next/router'
+import { GlobalSearchContext } from '@/contexts/global-search'
 
 export type NavbarProps = JSX.IntrinsicElements['nav'] & {
   variant?: 'hero' | 'primary'
@@ -14,6 +15,19 @@ type NavbarItem = {
   name: string
   href: string
   current?: boolean
+}
+
+const GlobalSearchButton = () => {
+  const { triggerOpen } = useContext(GlobalSearchContext)
+
+  return (
+    <button
+      className="font-semibold py-1 px-3 tracking-widest bg-gray-700 text-gray-100 rounded-lg backdrop-blur backdrop-filter bg-opacity-30 hover:bg-gray-600 hover:bg-opacity-60 transition-all duration-200"
+      onClick={triggerOpen}
+    >
+      ⌘ K
+    </button>
+  )
 }
 
 const DisclosurePanel: React.FC<{ navigation: NavbarItem[] }> = ({
@@ -36,6 +50,9 @@ const DisclosurePanel: React.FC<{ navigation: NavbarItem[] }> = ({
           </Disclosure.Button>
         </Link>
       ))}
+      <div className="px-3 py-2">
+        <GlobalSearchButton />
+      </div>
     </div>
   </Disclosure.Panel>
 )
@@ -119,7 +136,10 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
                       </Link>
                     ))}
                   </div>
-                </div>{' '}
+                </div>
+              </div>
+              <div className="hidden sm:block">
+                <GlobalSearchButton />
               </div>
             </div>
             <DisclosurePanel navigation={navigation} />
