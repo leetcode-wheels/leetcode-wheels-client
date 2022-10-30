@@ -55,14 +55,17 @@ export type UseGlobalSearchData = {
   open: boolean
   query: string
   activeCommandIndex: number
+  selectedCommand: Command
   triggerOpen: () => void
   triggerClose: () => void
+  handleSelectCommand: (newCommand: Command) => void
   type: (str: string) => void
 }
 
 const useGlobalSearch = (): UseGlobalSearchData => {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const [selectedCommand, setSelectedCommand] = useState(commands[0])
   const router = useRouter()
 
   const triggerOpen = useCallback(() => setOpen(true), [])
@@ -72,11 +75,9 @@ const useGlobalSearch = (): UseGlobalSearchData => {
   const type = (str: string) => setQuery(str)
 
   const filteredCommands = useMemo(() => {
-    if (query === '') return commands
-
     return commands.filter((command) => {
-      const normalizedQuery = query.toLocaleLowerCase().trim()
-      const normalizedName = command.name.toLocaleLowerCase()
+      const normalizedQuery = query.toLowerCase().trim()
+      const normalizedName = command.name.toLowerCase()
       const normalizedUrl = command.url
       const normalizedShortcut = command.shortcut.toLowerCase()
 
@@ -87,8 +88,18 @@ const useGlobalSearch = (): UseGlobalSearchData => {
   }, [query])
 
   const activeCommandIndex = useMemo(() => {
-    return filteredCommands.findIndex((e) => router.pathname === e.url)
+    const index = filteredCommands.findIndex((e) => router.pathname === e.url)
+    return index == -1 ? 0 : index
   }, [filteredCommands, router.pathname])
+
+  const handleSelectCommand = useCallback(
+    (newCommand: Command) => {
+      setSelectedCommand(newCommand)
+      triggerClose()
+      router.push(newCommand.url)
+    },
+    [router, triggerClose]
+  )
 
   const handlePressShortcut = useCallback(
     (e: KeyboardEvent) => {
@@ -131,8 +142,10 @@ const useGlobalSearch = (): UseGlobalSearchData => {
     open,
     query,
     activeCommandIndex,
+    selectedCommand,
     triggerOpen,
     triggerClose,
+    handleSelectCommand,
     type,
   }
 }
