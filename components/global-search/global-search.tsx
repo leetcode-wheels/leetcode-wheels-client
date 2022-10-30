@@ -2,28 +2,20 @@ import React, { Fragment } from 'react'
 import { Combobox, Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import clsx from 'classnames/bind'
-import { useRouter } from 'next/router'
-import { Command, UseGlobalSearchData } from '@/hooks/useGlobalSearch'
+import { UseGlobalSearchData } from '@/hooks/useGlobalSearch'
 import { CommandLineIcon } from '@heroicons/react/24/outline'
 
 export type GlobalSearchProps = UseGlobalSearchData
 
 const GlobalSearch: React.FC<GlobalSearchProps> = ({
-  commands,
+  selectedCommand,
+  handleSelectCommand,
   filteredCommands,
-  activeCommandIndex,
   open,
   query,
   triggerClose,
   type,
 }) => {
-  const router = useRouter()
-
-  const handleRedirectTo = (url: string) => {
-    router.push(url)
-    triggerClose()
-  }
-
   return (
     <Transition.Root
       show={open}
@@ -56,12 +48,14 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({
           >
             <Dialog.Panel className="mx-auto max-w-2xl transform divide-y divide-gray-500 divide-opacity-10 overflow-hidden rounded-xl bg-gray-900 bg-opacity-80 shadow-2xl ring-1 ring-black ring-opacity-5 backdrop-blur backdrop-filter transition-all">
               <Combobox
-                value={
-                  activeCommandIndex === -1
-                    ? commands[0]
-                    : commands[activeCommandIndex]
-                }
-                onChange={(item: Command) => handleRedirectTo(item.url)}
+                value={selectedCommand}
+                onChange={handleSelectCommand}
+                // value={
+                //   activeCommandIndex === -1
+                //     ? commands[0]
+                //     : commands[activeCommandIndex]
+                // }
+                // onChange={(item: Command) => handleRedirectTo(item.url)}
               >
                 <div className="relative">
                   <MagnifyingGlassIcon
