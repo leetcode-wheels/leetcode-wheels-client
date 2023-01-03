@@ -1,11 +1,11 @@
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useContext } from 'react'
 import clsx from 'classnames'
 import { useRouter } from 'next/router'
 import { GlobalSearchContext } from '@/contexts/global-search'
+import LeetcodeLogo from '../leetcode-logo'
 
 export type NavbarProps = JSX.IntrinsicElements['nav'] & {
   variant?: 'hero' | 'primary'
@@ -57,6 +57,27 @@ const DisclosurePanel: React.FC<{ navigation: NavbarItem[] }> = ({
   </Disclosure.Panel>
 )
 
+type NavbarLinkProps = {
+  item: NavbarItem
+}
+
+const NavbarLink: React.FC<NavbarLinkProps> = ({ item }) => (
+  <Link href={item.href}>
+    <a
+      className={clsx(
+        'transition-colors duration-200',
+        item.current
+          ? 'bg-zinc-900 text-white'
+          : 'text-zinc-300 hover:text-white hover:shadow-lg font-semibold',
+        'px-3 py-2 rounded-md text-sm font-medium'
+      )}
+      aria-current={item.current ? 'page' : undefined}
+    >
+      {item.name}
+    </a>
+  </Link>
+)
+
 const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
   const router = useRouter()
 
@@ -106,40 +127,27 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
 
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <Link href="/">
-                  <a className="flex flex-shrink-0 items-center gap-2">
-                    <Image
-                      className="block h-8 w-auto lg:hidden"
-                      src="https://leetcode.com/_next/static/images/logo-dark-c96c407d175e36c81e236fcfdd682a0b.png"
-                      alt="Your Company"
-                      width={22}
-                      height={24}
-                    />
-                    <span className="text-white font-semibold">LeetCode.w</span>
+                  <a className="inline-flex">
+                    <LeetcodeLogo />
                   </a>
                 </Link>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <Link key={item.name} href={item.href}>
-                        <a
-                          className={clsx(
-                            'transition-colors duration-200',
-                            item.current
-                              ? 'bg-zinc-900 text-white'
-                              : 'text-zinc-300 hover:text-white hover:shadow-lg font-semibold',
-                            'px-3 py-2 rounded-md text-sm font-medium'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      </Link>
+                      <NavbarLink key={item.name} item={item} />
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="hidden sm:block">
+              <div className="hidden sm:flex sm:space-x-4">
                 <GlobalSearchButton />
+                <NavbarLink
+                  item={{
+                    href: '/signin',
+                    name: 'Sign in',
+                    current: isCurrentPath('/signin'),
+                  }}
+                />
               </div>
             </div>
             <DisclosurePanel navigation={navigation} />

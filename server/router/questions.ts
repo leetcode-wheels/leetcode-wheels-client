@@ -8,7 +8,7 @@ const questionsRouter = createRouter()
     input: z.object({
       slug: z.string(),
     }),
-    resolve({ input }) {
+    resolve({ input, ctx }) {
       return getQuestionDetails(input.slug)
     },
   })
