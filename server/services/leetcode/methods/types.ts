@@ -13,6 +13,7 @@ import {
   questionDifficultyValidator,
   problemsetQuestionListValidator,
   problemseteQuestionValidator,
+  pointsHistoryValidator,
 } from './validators'
 
 export type UserProfile = z.infer<typeof userProfileObjectValidator>
@@ -44,3 +45,5 @@ export type ProblemsetQuestion = z.infer<typeof problemseteQuestionValidator>
 export type ProblemsetQuestionList = z.infer<
   typeof problemsetQuestionListValidator
 >
+
+export type PointsHistory = z.infer<typeof pointsHistoryValidator>

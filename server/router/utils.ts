@@ -1,3 +1,5 @@
 import * as trpc from '@trpc/server'
 
-export const createRouter = () => trpc.router()
+import { Context } from '../contexts/context'
+
+export const createRouter = () => trpc.router<Context>()

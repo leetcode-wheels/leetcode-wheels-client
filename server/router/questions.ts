@@ -16,7 +16,8 @@ const questionsRouter = createRouter()
     input: z.object({
       page: z.number(),
     }),
-    resolve({ input }) {
+    resolve({ input, ctx }) {
+      console.log('Real cookies', ctx.req.cookies)
       return getProblemsetQuestionList(50, 50 * (input.page - 1))
     },
   })

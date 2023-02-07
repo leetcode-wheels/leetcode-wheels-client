@@ -8,12 +8,13 @@ export type ButtonProps = JSX.IntrinsicElements['button'] & {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   submit?: boolean
   isLoading?: boolean
+  textCentered?: boolean
 }
 
 const classes = clsx.bind({
-  root: 'rounded-md font-semibold',
+  root: 'rounded-md font-semibold border-none',
   animated: 'transition-shadow hover:shadow-xl active:opacity-90',
-  primary: 'text-slate-300 bg-gray-800 border border-gray-600',
+  primary: 'text-slate-400 bg-gray-800 border border-gray-600',
   secondary: 'text-slate-900 bg-gray-300',
   disabled: 'opacity-70',
   sm: 'py-1 px-2',
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled,
   className,
   submit = false,
+  textCentered = false,
   isLoading,
   children,
   ...props
@@ -45,7 +47,12 @@ const Button: React.FC<ButtonProps> = ({
       )}
       {...props}
     >
-      <div className="w-auto flex items-center gap-2">
+      <div
+        className={classes(
+          'w-auto flex items-center gap-2',
+          textCentered && 'justify-center'
+        )}
+      >
         {isLoading && <Spinner size="xs" />}
         {children}
       </div>

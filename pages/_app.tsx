@@ -7,6 +7,7 @@ import GlobalSearchProvider from '@/contexts/global-search'
 
 import { AppRouter } from '@/server/router'
 import '../styles/globals.css'
+import { getCookie } from 'cookies-next'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,7 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Leetcode Wheels</title>
       </Head>
       <Toaster
-        position="top-left"
+        position='top-left'
         containerStyle={{
           top: 40,
           left: 40,
@@ -48,6 +49,12 @@ export default withTRPC<AppRouter>({
        * @link https://react-query.tanstack.com/reference/QueryClient
        */
       // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      headers() {
+        console.log('Getting auth cookie', getCookie('auth'))
+        return {
+          'set-cookie': getCookie('auth'),
+        }
+      },
     }
   },
   /**
