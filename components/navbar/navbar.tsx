@@ -5,7 +5,8 @@ import { useCallback, useContext } from 'react'
 import clsx from 'classnames'
 import { useRouter } from 'next/router'
 import { GlobalSearchContext } from '@/contexts/global-search'
-import LeetcodeLogo from '../leetcode-logo'
+import LeetcodeLogo from '@/components/leetcode-logo'
+import useAuthCookie from '@/hooks/auth/useAuthCookie'
 
 export type NavbarProps = JSX.IntrinsicElements['nav'] & {
   variant?: 'hero' | 'primary'
@@ -80,6 +81,7 @@ const NavbarLink: React.FC<NavbarLinkProps> = ({ item }) => (
 
 const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
   const router = useRouter()
+  const { isAuthenticated } = useAuthCookie()
 
   const isCurrentPath = useCallback(
     (path: string) => path == router.pathname,
@@ -141,13 +143,31 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'primary', className }) => {
               </div>
               <div className="hidden sm:flex sm:space-x-4">
                 <GlobalSearchButton />
-                <NavbarLink
-                  item={{
-                    href: '/signin',
-                    name: 'Sign in',
-                    current: isCurrentPath('/signin'),
-                  }}
-                />
+                {isAuthenticated ? (
+                  <>
+                    <NavbarLink
+                      item={{
+                        href: '/me',
+                        name: 'Profile',
+                        current: isCurrentPath('/me'),
+                      }}
+                    />
+                    <NavbarLink
+                      item={{
+                        href: '/signout',
+                        name: 'Sign out',
+                      }}
+                    />
+                  </>
+                ) : (
+                  <NavbarLink
+                    item={{
+                      href: '/signin',
+                      name: 'Sign in',
+                      current: isCurrentPath('/signin'),
+                    }}
+                  />
+                )}
               </div>
             </div>
             <DisclosurePanel navigation={navigation} />

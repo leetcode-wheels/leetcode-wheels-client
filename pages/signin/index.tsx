@@ -8,6 +8,7 @@ import TextField from '@/components/textfield/textfield'
 import Button from '@/components/button/button'
 import { toast } from 'react-hot-toast'
 import { trpc } from '@/config/trpc'
+import { setCookie } from 'cookies-next'
 
 const Form = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -16,9 +17,13 @@ const Form = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setIsLoading(true)
+    const cookie = e.target[0].value
     e.preventDefault()
-    mutateAsync({ cookie: e.target[0].value })
-      .then(() => router.push('/'))
+    mutateAsync({ cookie })
+      .then(() => {
+        setCookie('auth', cookie)
+        router.push('/')
+      })
       .catch((err) => {
         console.error(err)
         toast.error('There was an error, check the console...')

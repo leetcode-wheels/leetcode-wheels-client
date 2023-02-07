@@ -105,3 +105,13 @@ export const problemsetQuestionListValidator = z.object({
   total: z.number(),
   questions: z.array(problemseteQuestionValidator),
 })
+
+export const pointsHistoryValidator = z.object({
+  scores: z.array(
+    z.object({
+      score: z.number(),
+      description: z.string(),
+      date: z.string(),
+    })
+  ),
+})

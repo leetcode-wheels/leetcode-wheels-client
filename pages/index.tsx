@@ -2,6 +2,8 @@ import { NextPage } from 'next'
 import clsx from 'classnames'
 
 import Navbar from '@/components/navbar'
+import useAuthCookie from '@/hooks/auth/useAuthCookie'
+import { trpc } from '@/config/trpc'
 
 const HeroSection: React.FC = () => {
   return (
@@ -27,10 +29,19 @@ const HeroSection: React.FC = () => {
 }
 
 const Home: NextPage = () => {
+  const { isAuthenticated, cookie } = useAuthCookie()
+  const { data } = trpc.useQuery(['points.history'])
+
   return (
     <div className="relative bg-zinc-900 min-h-screen bg-hero-gradient">
       <Navbar variant="hero" />
       <HeroSection />
+      Is authenticated: {isAuthenticated ? 'yes' : 'no'}
+      Cookie value: {cookie}
+      <div>
+        Points History Data:
+        <pre>{JSON.stringify(data)}</pre>
+      </div>
     </div>
   )
 }
