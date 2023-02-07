@@ -39,12 +39,12 @@ const Hero = () => {
               An open source project to boost your Leetcode funcionalities.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link href="#">
+              <Link href="#features">
                 <a>
                   <Button variant="primary">Get started</Button>
                 </a>
               </Link>
-              <Link href="#">
+              <Link href="#features">
                 <a>
                   <Button>
                     Learn more <span aria-hidden="true">→</span>
